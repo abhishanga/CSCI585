@@ -1,5 +1,4 @@
 Name:Abhishanga Upadhyay
-USC ID:9175393242
 E-Mail:aupadhya@usc.edu
 List of submitted files:
 XML Schema:company.xsd
