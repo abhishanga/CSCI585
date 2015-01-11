@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- New XSD document created with EditiX XML Editor (http://www.editix.com) at Fri Nov 28 14:07:48 PST 2014 -->
+
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+	<xs:element name="Company">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Department" maxOccurs="unbounded" />   
+				<xs:element ref="Employee" maxOccurs="unbounded" />
+                <xs:element ref="Division" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element ref="WorksFor" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+
+		<!-- Primary key declarations -->
+		<xs:key name="PKDepartments">
+            <xs:selector xpath="Department/deptId"/>
+            <xs:field xpath="." />
+        </xs:key>
+		
+		<xs:key name="PKDivisions">
+            <xs:selector xpath="Division/divId"/>
+            <xs:field xpath="." />
+        </xs:key>
+        
+        <xs:key name="PKEmployees">
+            <xs:selector xpath="Employee/empId"/>
+            <xs:field xpath="." />
+        </xs:key>
+
+        <!-- Division foreign key declarations -->
+        <xs:keyref name="FKDeptToDivision" refer="PKDepartments">
+        	<xs:selector xpath="Division/housedDeptId" />
+        	<xs:field xpath="." />
+        </xs:keyref>
+        
+        <xs:keyref name="FKEmployeeToDivision" refer="PKEmployees">
+            <xs:selector xpath="Division/managerEmpId"/>
+            <xs:field xpath="." />
+        </xs:keyref>
+
+        <!-- WorksFor foreign key declarations -->
+        <xs:keyref name="FKDivisisionToWorksFor" refer="PKDivisions">
+            <xs:selector xpath="WorksFor/divId"/>
+            <xs:field xpath="." />
+        </xs:keyref>
+
+        <xs:keyref name="FKEmployeeToWorksFor" refer="PKEmployees">
+            <xs:selector xpath="WorksFor/empId"/>
+            <xs:field xpath="." />
+        </xs:keyref>
+
+	</xs:element>
+
+
+	<xs:element name="Employee">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="empId" type="xs:integer" />
+				<xs:element name="empName" type="xs:string" />
+				<xs:element name="empPhone" minOccurs="0">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:pattern value="[1-9][0-9]{2}\-[0-9]{3}\-[0-9]{4}" />
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="empOffice" type="xs:string" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+
+	<xs:element name="Department">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="deptId">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:pattern value="[A-Z]{3}" />
+						</xs:restriction> 
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="deptName" type="xs:string" />
+				<xs:element name="deptAddr" type="xs:string"  />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+
+	<xs:element name="Division">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="divId" type="xs:string" />
+				<xs:element name="divName" type="xs:string" />
+				<xs:element name="divPhone">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:pattern value="[1-9][0-9]{2}\-[0-9]{3}\-[0-9]{4}" />
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="housedDeptId">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:pattern value="[A-Z]{3}" />
+						</xs:restriction> 
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="managerEmpId" type="xs:integer" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+
+	<xs:element name="WorksFor">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="divId" type="xs:string" />
+				<xs:element name="empId" type="xs:integer" />
+				<xs:element name="percentTime">
+					<xs:simpleType>
+						<xs:restriction base="xs:integer">
+							<xs:minInclusive value="0"/>
+					    	<xs:maxInclusive value="100"/>
+					    </xs:restriction> 
+					</xs:simpleType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+</xs:schema>
